@@ -13,15 +13,15 @@ function displayResults(x, y, problemResult, textCount, isFromCookie) {
         <h3>Результати Варіанту 16 (Обчислення)</h3>
         <p>1. Вміст блоків "x" та "y" (після обміну): </p>
         <ul>
-            <li>x (Контент блоку 1): "${x.substring(0, 30)}..."</li>
-            <li>y (Контент блоку 4): "${y.substring(0, 30)}..."</li>
+            <li>**x** (Контент блоку 1): "${x.substring(0, 30)}..."</li>
+            <li>**y** (Контент блоку 4): "${y.substring(0, 30)}..."</li>
         </ul>
-        <p>2. Площа паралелограма (довжина x * довжина y): ${problemResult}</p>
-        <p>3. Кількість слів у тексті (блоку 3): ${textCount}</p>
+        <p>2. Площа паралелограма (довжина x * довжина y): **${problemResult}**</p>
+        <p>3. Кількість слів у тексті (блоку 3): **${textCount}**</p>
     `;
 
     if (isFromCookie) {
-        content += `<p style="color: blue;">* Результат відновлено з cookie.</p>`;
+        content += `<p style="color: green;">* Результат відновлено з cookie.</p>`;
     } else {
         content += `<p style="color: blue;">* Новий результат обчислено та збережено в cookie.</p>`;
     }
@@ -122,10 +122,16 @@ function setupTask5() {
     block3.appendChild(containerList);
 
     function hasTextNodes(block) {
-        return Array.from(block.childNodes).some(node => 
+        const directTextNode = Array.from(block.childNodes).some(node => 
             node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0
         );
-    }
+
+        const childElementText = Array.from(block.children).some(child => 
+            child.textContent.trim().length > 0
+        );
+        
+    return directTextNode || childElementText;
+}
 
     function addFormToBlock(blockId, blockNumber) {
         const targetBlock = document.getElementById(blockId);
