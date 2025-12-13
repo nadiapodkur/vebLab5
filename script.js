@@ -1,3 +1,38 @@
+function task1_swapXY() {
+    const blockX = document.getElementById('blockX');
+    const blockY = document.getElementById('blockY');
+
+    if (blockX && blockY) {
+        const tempContent = blockX.innerHTML;
+        blockX.innerHTML = blockY.innerHTML;
+        blockY.innerHTML = tempContent;
+        console.log('Task 1: Content of blocks X and Y has been swapped.');
+    }
+}
+
+function task2_parallelogramArea() {
+
+    const base = 15;    
+    const height = 8;   
+
+    const area = base * height;
+
+    const areaResultDiv = document.getElementById('areaResult');
+    if (areaResultDiv) {
+        areaResultDiv.innerHTML = `
+            <div style="background-color: #d4edda; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                <h4>Task 2: Parallelogram Area Calculation</h4>
+                <p><strong>Base:</strong> ${base}</p>
+                <p><strong>Height:</strong> ${height}</p>
+                <p><strong>Area (base × height):</strong> ${area}</p>
+            </div>
+        `;
+        console.log(`Task 2: Parallelogram area = ${area} (base=${base}, height=${height})`);
+    }
+}
+
+const COOKIE_NAME = 'wordCountResult';
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -5,223 +40,188 @@ function getCookie(name) {
     return null;
 }
 
-function displayResults(x, y, problemResult, textCount, isFromCookie) {
-    const additionalContentDiv = document.getElementById('additional_content');
-    if (!additionalContentDiv) return;
-
-    let content = `
-        <h3>Результати Варіанту 16 (Обчислення)</h3>
-        <p>1. Вміст блоків "x" та "y" (після обміну): </p>
-        <ul>
-            <li>**x** (Контент блоку 1): "${x.substring(0, 30)}..."</li>
-            <li>**y** (Контент блоку 4): "${y.substring(0, 30)}..."</li>
-        </ul>
-        <p>2. Площа паралелограма (довжина x * довжина y): **${problemResult}**</p>
-        <p>3. Кількість слів у тексті (блоку 3): **${textCount}**</p>
-    `;
-
-    if (isFromCookie) {
-        content += `<p style="color: green;">* Результат відновлено з cookie.</p>`;
-    } else {
-        content += `<p style="color: blue;">* Новий результат обчислено та збережено в cookie.</p>`;
-    }
-
-    additionalContentDiv.innerHTML = content;
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
 }
 
-function runTask123() {
-    const block1 = document.getElementById('block1');
-    const block4 = document.getElementById('block4');
-    const block3 = document.getElementById('block3');
-    const cookieName = 'assignment16_results';
+function deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
 
-    if (!block1 || !block4 || !block3) {
-        console.error('Не знайдено необхідних блоків (1, 3, 4) для Завдання 1-3.');
+function task3_wordCount() {
+    const wordCountSection = document.getElementById('wordCountSection');
+    const wordCountForm = document.getElementById('wordCountForm');
+    const textInput = document.getElementById('textInput');
+
+    const savedResult = getCookie(COOKIE_NAME);
+
+    if (savedResult) {
+        if (wordCountForm) {
+            wordCountForm.style.display = 'none';
+        }
+        alert(`Saved word count result from cookies:\n\n${savedResult}\n\nClicking "OK" will delete the cookies.`);
+
+        deleteCookie(COOKIE_NAME);
+
+        alert('Cookies have been deleted!\n\nClicking "OK" will reload the page with the initial state.');
+
+        window.location.reload();
         return;
     }
-    
-    const cookieData = getCookie(cookieName);
+    if (wordCountForm) {
+        wordCountForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    if (cookieData) {
-        const parsedData = JSON.parse(cookieData);
-        displayResults(parsedData.x, parsedData.y, parsedData.area, parsedData.wordCount, true);
+            const text = textInput.value.trim();
 
-        const confirmDelete = confirm(`
-            Інформація збережена в cookies.
-            Натисніть "ОК", щоб видалити дані cookies, або "Скасувати", щоб зберегти.
-        `);
+            if (!text) {
+                alert('Please enter some text to count words.');
+                return;
+            }
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const wordCount = words.length;
+            const resultMessage = `Text: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"\nWord count: ${wordCount}`;
 
-        if (confirmDelete) {
-            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-            alert("Cookies видалено! Натискання «ОК» перезавантажує веб-сторінку.");
-            window.location.reload();
-        }
+            alert(`Word Count Result:\n\n${resultMessage}`);
 
-    } else {
-        const content1 = block1.innerHTML; 
-        const content4 = block4.innerHTML; 
-        block1.innerHTML = content4; 
-        block4.innerHTML = content1; 
+            setCookie(COOKIE_NAME, resultMessage, 7);
 
-        const x = block1.textContent.trim();
-        const y = block4.textContent.trim();
-
-        const base = x.length;
-        const height = y.length;
-        const area = base * height; 
-
-        const textBlock3 = block3.textContent;
-        const words = textBlock3.match(/\b\w+\b/g);
-        const wordCount = words ? words.length : 0;
-
-        const newResultData = JSON.stringify({ x: x, y: y, area: area, wordCount: wordCount });
-        const date = new Date();
-        date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); 
-        const expires = "; expires=" + date.toUTCString();
-        document.cookie = `${cookieName}=${newResultData}${expires}; path=/`;
-
-        displayResults(x, y, area, wordCount, false);
+            console.log(`Task 3: Word count = ${wordCount}, saved to cookies`);
+        });
     }
 }
 
-function setupTask4() {
+const BLOCK2_COLOR_KEY = 'block2BackgroundColor';
+
+function task4_block2Background() {
     const block2 = document.getElementById('block2');
-    const storageKey = 'block2BackgroundColor';
+    const colorPicker = document.getElementById('colorPicker');
 
-    if (!block2) return;
+    if (!block2 || !colorPicker) return;
 
-    const savedColor = localStorage.getItem(storageKey);
+    const savedColor = localStorage.getItem(BLOCK2_COLOR_KEY);
     if (savedColor) {
         block2.style.backgroundColor = savedColor;
+        colorPicker.value = savedColor;
+        console.log(`Task 4: Restored block 2 background color from localStorage: ${savedColor}`);
     }
-
-    const changeColor = () => {
-        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-        block2.style.backgroundColor = randomColor;
-        localStorage.setItem(storageKey, randomColor);
-    };
-
-    block2.addEventListener('mouseout', changeColor);
-    block2.addEventListener('click', changeColor); 
+    block2.addEventListener('mouseout', function() {
+        const selectedColor = colorPicker.value;
+        block2.style.backgroundColor = selectedColor;
+        localStorage.setItem(BLOCK2_COLOR_KEY, selectedColor);
+        console.log(`Task 4: Block 2 background changed to ${selectedColor} on mouseout`);
+    });
 }
 
-function setupTask5() {
-    const block3 = document.getElementById('block3');
-    if (!block3) return;
+const BG_IMAGE_PREFIX = 'blockBgImage_';
 
-    const containerList = document.createElement('ol');
-    containerList.style.marginTop = '20px';
-    containerList.style.cursor = 'pointer';
-    containerList.innerHTML = `
-        <li data-block="1">1. Блок 1 (Header)</li>
-        <li data-block="2">2. Блок 2 (Menu)</li>
-        <li data-block="3">3. Блок 3 (Content)</li>
-        <li data-block="4">4. Блок 4 (Footer)</li>
-        <li data-block="5">5. Блок 5 (Contact)</li>
-    `;
-    block3.appendChild(containerList);
-
-    function hasTextNodes(block) {
-        const directTextNode = Array.from(block.childNodes).some(node => 
-            node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0
-        );
-
-        const childElementText = Array.from(block.children).some(child => 
-            child.textContent.trim().length > 0
-        );
-        
-    return directTextNode || childElementText;
-}
-
-    function addFormToBlock(blockId, blockNumber) {
-        const targetBlock = document.getElementById(blockId);
-        if (!targetBlock) return;
-
-        const existingForm = targetBlock.querySelector('.bg-form');
-        if (existingForm) {
-            existingForm.remove();
+function hasTextNodes(element) {
+    for (const node of element.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) {
+            return true;
         }
-
-        const formDiv = document.createElement('div');
-        formDiv.className = 'bg-form';
-        formDiv.style.padding = '10px';
-        formDiv.style.marginTop = '10px';
-        formDiv.style.border = '1px dashed red';
-        formDiv.innerHTML = `<h4>Управління фоном Блоку ${blockNumber}</h4>`;
-
-        const inputUrl = document.createElement('input');
-        inputUrl.type = 'text';
-        inputUrl.placeholder = 'Введіть URL фонового зображення';
-        inputUrl.style.display = 'block';
-        inputUrl.style.width = '90%';
-        inputUrl.style.marginBottom = '5px';
-        inputUrl.value = localStorage.getItem(`block${blockNumber}_bg`) || ''; 
-        formDiv.appendChild(inputUrl);
-
-        const saveButton = document.createElement('button');
-        saveButton.textContent = 'Зберегти фон';
-        saveButton.style.marginRight = '10px';
-        formDiv.appendChild(saveButton);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Видалити фон';
-        formDiv.appendChild(deleteButton);
-
-        targetBlock.appendChild(formDiv);
-
-        saveButton.addEventListener('click', () => {
-            const url = inputUrl.value.trim();
-            if (url) {
-                if (hasTextNodes(targetBlock)) {
-                    targetBlock.style.backgroundImage = `url(${url})`;
-                    targetBlock.style.backgroundSize = 'cover';
-                    targetBlock.style.backgroundRepeat = 'no-repeat';
-                    localStorage.setItem(`block${blockNumber}_bg`, url);
-                    alert(`Фон для Блоку ${blockNumber} збережено.`);
-                } else {
-                    alert(`Помилка: Блок ${blockNumber} не містить текстових вузлів. Зображення не додано.`);
-                }
-            } else {
-                 alert('Введіть коректний URL.');
-            }
-        });
-
-        deleteButton.addEventListener('click', () => {
-            targetBlock.style.backgroundImage = 'none';
-            localStorage.removeItem(`block${blockNumber}_bg`);
-            inputUrl.value = '';
-            alert(`Фон для Блоку ${blockNumber} видалено.`);
-        });
+        if (node.nodeType === Node.ELEMENT_NODE && node.textContent.trim().length > 0) {
+            return true;
+        }
     }
+    return false;
+}
 
-    containerList.addEventListener('click', (event) => {
-        if (event.target.tagName === 'LI') {
-            const actualBlockNumber = parseInt(event.target.getAttribute('data-block'));
-            const blockId = `block${actualBlockNumber}`;
+function task5_backgroundImages() {
+    const containerList = document.getElementById('containerList');
 
-            addFormToBlock(blockId, actualBlockNumber);
+    if (!containerList) return;
+    restoreBackgroundImages();
+    containerList.addEventListener('click', function(e) {
+        if (e.target.tagName === 'LI') {
+            const blockId = e.target.getAttribute('data-block');
+            showBackgroundForm(blockId);
         }
     });
-
-    function restoreBackgrounds() {
-        for (let i = 1; i <= 5; i++) {
-            const savedBg = localStorage.getItem(`block${i}_bg`);
-            if (savedBg) {
-                const block = document.getElementById(`block${i}`);
-                if (block) {
-                    block.style.backgroundImage = `url(${savedBg})`;
-                    block.style.backgroundSize = 'cover';
-                    block.style.backgroundRepeat = 'no-repeat';
-                }
-            }
-        }
-    }
-    
-    restoreBackgrounds();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    runTask123(); 
-    setupTask4(); 
-    setupTask5();
+function restoreBackgroundImages() {
+    const blocks = ['block1', 'block2', 'block3', 'block4', 'block5'];
+
+    blocks.forEach(blockId => {
+        const savedBgUrl = localStorage.getItem(BG_IMAGE_PREFIX + blockId);
+        if (savedBgUrl) {
+            const block = document.getElementById(blockId);
+            if (block) {
+                block.style.backgroundImage = `url(${savedBgUrl})`;
+                block.style.backgroundSize = 'cover';
+                block.style.backgroundRepeat = 'no-repeat';
+                console.log(`Task 5: Restored background image for ${blockId}`);
+            }
+        }
+    });
+}
+
+function showBackgroundForm(blockId) {
+    const block = document.getElementById(blockId);
+    if (!block) return;
+
+    if (!hasTextNodes(block)) {
+        alert(`Block ${blockId} does not have text content. Cannot add background image.`);
+        return;
+    }
+    const existingForm = block.querySelector('.bg-image-form');
+    if (existingForm) {
+        existingForm.remove();
+        return; 
+    }
+    const formDiv = document.createElement('div');
+    formDiv.className = 'bg-image-form';
+    formDiv.innerHTML = `
+        <h4>Background Image for ${blockId}</h4>
+        <input type="text" id="bgUrl_${blockId}" placeholder="Enter image URL..."
+               value="${localStorage.getItem(BG_IMAGE_PREFIX + blockId) || ''}">
+        <br>
+        <button id="saveBg_${blockId}">Save Background</button>
+        <button id="deleteBg_${blockId}">Remove Background</button>
+    `;
+
+    block.appendChild(formDiv);
+    document.getElementById(`saveBg_${blockId}`).addEventListener('click', function() {
+        const urlInput = document.getElementById(`bgUrl_${blockId}`);
+        const url = urlInput.value.trim();
+
+        if (!url) {
+            alert('Please enter a valid image URL.');
+            return;
+        }
+        block.style.backgroundImage = `url(${url})`;
+        block.style.backgroundSize = 'cover';
+        block.style.backgroundRepeat = 'no-repeat';
+
+        localStorage.setItem(BG_IMAGE_PREFIX + blockId, url);
+
+        alert(`Background image saved for ${blockId}!`);
+        console.log(`Task 5: Saved background image for ${blockId}: ${url}`);
+    });
+
+    document.getElementById(`deleteBg_${blockId}`).addEventListener('click', function() {
+        block.style.backgroundImage = 'none';
+
+        localStorage.removeItem(BG_IMAGE_PREFIX + blockId);
+
+        document.getElementById(`bgUrl_${blockId}`).value = '';
+
+        alert(`Background image removed from ${blockId}!`);
+        console.log(`Task 5: Removed background image from ${blockId}`);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Lab 5 - Variant 16 - Initializing...');
+
+    task1_swapXY();
+    task2_parallelogramArea();
+    task3_wordCount();
+    task4_block2Background();
+    task5_backgroundImages();
+
+    console.log('Lab 5 - Variant 16 - All tasks initialized.');
 });
