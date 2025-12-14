@@ -51,7 +51,7 @@ li {
 .four {
     position: relative;
     max-height: 200px;
-    background-image: url(images/footer.jpg);
+    background-image: url(./footer.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -70,5 +70,5 @@ h2 {
 
 .five {
     flex-grow: 1;
-    background-color: darkgray;
+    background-color: grey;
 }
