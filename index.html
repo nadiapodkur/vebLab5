@@ -1,88 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>...Piercing studio</title>
     <link rel="stylesheet" href="original.css">
 </head>
 <body>
     <div class="whole_body">
-        <!-- Block 1 - Header -->
-        <div class="block block1" id="block1">
-            <h1>... Piercing studio</h1>
-            <p>Welcome to our studio!</p>
+        <div class="left_section">
+            <header class="one" id="block1"> 
+                <h1 style="float: right; padding: 3%; font-family: myCursive; font-size: 4vw; color: white;" >... Piercing studio</h1>
+            </header>
+            
+            <div class="tree" id="block3"> 
+                <p style="font-weight: bold;">The "... Piercing studio" is offering a wide range of different procedures and products!</p>
+                <img src="images/studio_photo.jpeg" style="width: 30%; height: auto;" alt="The image of the studio">
+                <p>Not only you can get your face, ears and body pierced, but also you can buy many different types of jewerly. To do that go to the "Jewerly"</p>
+                
+                <div id="additional_content"></div>
+                </div>
+            
+            <footer class="four" id="block4"> 
+                <p style="color: white; font-family: myCursive; font-size: xx-large; padding-left: 4%;">Make yourself a dream version of you!</p>
+            </footer>
         </div>
 
-        <!-- Block X -->
-        <div class="block blockX" id="blockX">
-            <h3>Block X Content</h3>
-            <p>This is the original content of block X. It contains information about our services.</p>
-        </div>
-
-        <!-- Block 2 - Menu -->
-        <div class="block block2" id="block2">
-            <h3>Menu</h3>
-            <ul>
-                <li><a href="piercing.html">Piercing</a></li>
-                <li><a href="aboutMe.html">About me</a></li>
-                <li><a href="jewerly.html">Jewerly</a></li>
-            </ul>
-            <div id="colorControl">
-                <label>Background color: <input type="color" id="colorPicker" value="#d3d3d3"></label>
+        <div class="right_section">
+            <div class="two" id="block2"> 
+                <ul style="font-size: xx-large; font-family: cursive;">
+                    <li><a href="piercing.html" style="color: black;" >Piercing</a></li>
+                    <li><a href="aboutMe.html" style="color: black;" >About me</a></li>
+                    <li><a href="jewerly.html" style="color: black;" >Jewerly</a></li>
+                </ul>
             </div>
-        </div>
-
-        <!-- Block 3 - Main Content -->
-        <div class="block block3" id="block3">
-            <p style="font-weight: bold;">The "... Piercing studio" is offering a wide range of different procedures and products!</p>
-            <img src="images/studio_photo.jpeg" style="width: 30%; height: auto;" alt="The image of the studio">
-            <p>Not only you can get your face, ears and body pierced, but also you can buy many different types of jewerly. To do that go to the "Jewerly"</p>
-
-            <!-- Task 2: Area result will be appended here -->
-            <div id="areaResult"></div>
-
-            <!-- Task 3: Word count form -->
-            <div id="wordCountSection">
-                <h4>Word Counter (Task 3)</h4>
-                <form id="wordCountForm">
-                    <textarea id="textInput" rows="4" cols="50" placeholder="Enter text to count words..."></textarea><br>
-                    <button type="submit">Count Words</button>
-                </form>
+            
+            <div class="five" id="block5"> 
+                <h2 style="font-family: myCursive; padding: 5%; font-size: xx-large; position: relative;">Contact us:</h2>
             </div>
-
-            <!-- Task 5: Container list for background images -->
-            <div id="containerListSection">
-                <h4>Background Image Manager (Task 5)</h4>
-                <p>Click on a block to add background image:</p>
-                <ol id="containerList">
-                    <li data-block="block1">Block 1 (Header)</li>
-                    <li data-block="block2">Block 2 (Menu)</li>
-                    <li data-block="block3">Block 3 (Content)</li>
-                    <li data-block="block4">Block 4</li>
-                    <li data-block="block5">Block 5 (Contact)</li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Block Y -->
-        <div class="block blockY" id="blockY">
-            <h3>Block Y Content</h3>
-            <p>This is the original content of block Y. Contact information and additional details here.</p>
-        </div>
-
-        <!-- Block 4 - Footer -->
-        <div class="block block4" id="block4">
-            <p>Make yourself a dream version of you!</p>
-        </div>
-
-        <!-- Block 5 - Contact -->
-        <div class="block block5" id="block5">
-            <h2>Contact us:</h2>
-            <p>Phone: +380 XX XXX XXXX</p>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
