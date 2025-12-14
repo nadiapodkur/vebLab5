@@ -62,6 +62,7 @@ li {
     position: relative;
     font-family: cursive;
     min-height: 125vh;
+}
 
 h2 {
     position: relative;
@@ -70,5 +71,5 @@ h2 {
 
 .five {
     flex-grow: 1;
-    background-color: grey;
+    background-color: darkgray;
 }
